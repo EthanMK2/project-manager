@@ -3,23 +3,6 @@ import { Inter } from "next/font/google";
 import { lusitana } from "./ui/fonts";
 import "./globals.css";
 
-// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = JSON.parse(process.env.FIREBASE_CONFIG ?? '{}');
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-if (app.name && typeof window !== 'undefined') {
-  const analytics = getAnalytics(app);
-}
-
-
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -32,6 +15,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
       <body className={lusitana.className}>{children}</body>

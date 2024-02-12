@@ -1,3 +1,5 @@
+"use client"
+
 import { inter } from "./fonts"
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
