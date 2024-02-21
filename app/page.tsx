@@ -1,8 +1,13 @@
+"use client";
 import Link from "next/link";
 import Button from "./ui/button";
 import Image from "next/image";
+import { auth } from "@/app/lib/firebase";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  
   return <>
     <header className="p-12 text-4xl"><h1 className="block">
       Logis Projects

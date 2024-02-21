@@ -1,4 +1,5 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp, getApps, getApp } from 'firebase/app';
+import { getAuth } from 'firebase/auth';
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 
@@ -13,5 +14,8 @@ const firebaseConfig = {
   measurementId: "G-9PHHQQT2HC"
 };
 
-// Remember to assign (call) this app in components when needed
-export const app = initializeApp(firebaseConfig);
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApp();
+
+const auth = getAuth(app);
+
+export { app, auth }

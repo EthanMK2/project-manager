@@ -1,23 +1,58 @@
 'use client'
 import Link from "next/link";
 import Button from "../ui/button";
-import { createAccount } from "../lib/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import {auth} from "@/app/lib/firebase";
+import { useRouter } from "next/navigation";
 
 export default function Page() {
-  async function createNewAccount(formData: FormData) {
-    const res = await createAccount(formData);
-    if (res) {
-      // redirect
-      console.log("successfully created! Redirect!")
-    } else {
-      console.log("failed to create, notify user")
+  const router = useRouter()
+
+  async function createAccount(formData: FormData) {
+
+    // check for errors (client)
+    const data = {
+      email: formData.get("email"),
+      password: formData.get("password"),
+      passwordConfirm: formData.get("password-confirm")
     }
+
+    if (!data.email || !data.password) {
+      console.log("no email, or, no password, or neither")
+      return false
+    }
+
+    const email = data.email.toString()
+    const password = data.password.toString()
+    const passwordConfirm = data.passwordConfirm?.toString() // do validation
+
+    try {
+      createUserWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed up 
+          const user = userCredential.user;
+          console.log("signed up");
+          router.push('/dashboard');
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          console.log(errorCode, errorMessage)
+          // ..
+        });
+
+    } catch (error) {
+      console.log(error)
+      return false
+    }
+    return true;
   }
 
   return <main className="w-full min-h-screen px-2 grid place-content-center">
     <div className="w-full max-w-[400px] bg-white dark:bg-gray-700 px-4 rounded block">
       <h1 className="text-3xl text-center mb-2 pt-2">Sign Up</h1>
-      <form action={createNewAccount}>
+      <form action={createAccount}>
         <label htmlFor="email">Email
           <input name="email" type="email" id="email" placeholder="email@example.com" className="bg-gray-100 w-full rounded px-4 mb-8 py-2 focus:border-blue-500" />
         </label>

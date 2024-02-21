@@ -1,9 +1,44 @@
 'use client'
 import Link from "next/link";
 import Button from "../ui/button";
-import { login } from "../lib/auth";
+import { useRouter } from "next/navigation";
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "@/app/lib/firebase";
+
 
 export default function Page() {
+  const router = useRouter();
+
+  async function login(formData: FormData) {
+    const data = {
+      email: formData.get("email"),
+      password: formData.get("password")
+    }
+    if (!data.email || !data.password) {
+      console.log("no email, or, no password, or neither")
+      return false
+    }
+    const email = data.email.toString()
+    const password = data.password.toString()
+
+    try {
+      signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+          // Signed in 
+          const user = userCredential.user;
+          console.log("signed into firebase");
+          router.push("/dashboard");
+          // ...
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+        });
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return <main className="w-full min-h-screen px-2 grid place-content-center">
     <div className="w-full bg-white dark:bg-gray-700 px-4 rounded block">
       <h1 className="text-3xl text-center mb-2 pt-2">Login</h1>
