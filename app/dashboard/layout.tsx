@@ -19,7 +19,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   //   router.push("/login");
   // }
 
-  console.log(user)
+  //console.log(user)
 
   return (<>
     {showMobileNav && <div id="mobile-nav" className="absolute lg:relative block lg:hidden bg-white h-full">
@@ -36,7 +36,11 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Navlinks />
         <Button onClick={() => {
           signOut(auth);
+          console.log(auth.currentUser)
         }}>Log Out</Button>
+        <Button onClick={() => {
+          console.log(auth.currentUser)
+        }}>Check User</Button>
       </div>
       <div className="">{children}</div>
     </div>

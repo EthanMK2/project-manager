@@ -1,3 +1,3 @@
 export default function Page() {
-  return <main className="min-h-screen"> </main>
+  return <main className="min-h-screen">Home Page</main>
 }
