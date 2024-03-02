@@ -4,11 +4,15 @@ import Button from "../ui/button";
 import Navlinks from "../ui/navlinks";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [showMobileNav, setShowMobileNav] = useState<boolean>(true)
 
   const router = useRouter();
+
+  const { data: session } = useSession();
 
   // not consistent
   // if (!user) {
@@ -31,11 +35,8 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* Logis Projects Logo */}
         <Navlinks />
         <Button onClick={() => {
-
-        }}>Log Out</Button>
-        <Button onClick={() => {
-          
-        }}>Check User</Button>
+          signOut()
+        }}>Log Out {session?.user?.email}</Button>
       </div>
       <div className="">{children}</div>
     </div>

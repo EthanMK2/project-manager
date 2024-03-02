@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Button from "../ui/button";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 export default function Page() {
   const router = useRouter()
@@ -37,8 +38,21 @@ export default function Page() {
       })
 
       if (res.ok) {
+        // will this login race the mongodb user creation?
         console.log("signed up");
+        const res = await signIn("credentials", {
+          email, 
+          password,
+          redirect: false
+        })
+  
+        if (res?.error) {
+          console.log("signin error has occurred");
+          return;
+        }
+
         router.push('/dashboard');
+
       } else {
         console.log("failed to create user or already exists");
       }

@@ -2,28 +2,38 @@
 import Link from "next/link";
 import Button from "../ui/button";
 import { useRouter } from "next/navigation";
+import { signIn } from "next-auth/react";
 
 
 export default function Page() {
   const router = useRouter();
 
   async function login(formData: FormData) {
-    const data = {
-      email: formData.get("email"),
-      password: formData.get("password")
+    const email = formData.get("email")
+    const password = formData.get("password")
+
+    if (!email || !password) {
+      console.log("missing email or password")
+      return
     }
-    if (!data.email || !data.password) {
-      console.log("no email, or, no password, or neither")
-      return false
-    }
-    const email = data.email.toString()
-    const password = data.password.toString()
 
     try {
-      router.push("/dashboard");
+      const res = await signIn("credentials", {
+        email, 
+        password,
+        redirect: false
+      })
+
+      if (res?.error) {
+        console.log("signin error has occurred");
+        return;
+      }
+
+      router.replace("/dashboard");
     } catch (error) {
-      console.log(error)
+
     }
+
   }
 
   return <main className="w-full min-h-screen px-2 grid place-content-center">

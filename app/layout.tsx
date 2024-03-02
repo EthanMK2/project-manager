@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { lusitana } from "./ui/fonts";
 import "./globals.css";
+import { AuthProvider } from "./Providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,7 +19,11 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={lusitana.className}>{children}</body>
+      <body className={lusitana.className}>
+        <AuthProvider>
+          {children}
+        </AuthProvider>
+      </body>
     </html>
   );
 }

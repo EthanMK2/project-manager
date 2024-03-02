@@ -2,9 +2,6 @@
 import Link from "next/link";
 import Button from "./ui/button";
 import Image from "next/image";
-import { auth } from "@/app/lib/firebase";
-import { useAuthState } from "react-firebase-hooks/auth";
-import { useRouter } from "next/navigation";
 
 export default function Home() {
   
