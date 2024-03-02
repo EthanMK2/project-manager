@@ -1,31 +1,34 @@
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { NextResponse } from "next/server";
+import connectMongoDB from "@/app/lib/mongodb"
+import User from "@/app/models/user";
+import bcrypt from "bcryptjs";
 
-interface AccountProps {
-  email: string,
-  password: string
-}
 
 export async function POST(request: Request) {
-  const data = await request.json()
-  const {email, password} = data
-  console.log("about to send this email: ", email)
-  console.log("about to send this password: ", password)
-  const auth = getAuth();
-  createUserWithEmailAndPassword(auth, email, password)
-    .then((userCredential) => {
-      // Signed up 
-      const user = userCredential.user;
-      console.log("signed up")
-      // ...
-    })
-    .catch((error) => {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      console.log(errorCode, errorMessage)
-      // ..
-    });
-  return NextResponse.json("")
+  try {
+    const data = await request.json()
+    const { email, password } = data
+    const hashedPassword = await bcrypt.hash(password, 10)
+    console.log("about to send this email: ", email)
+    console.log("about to send this password: ", password)
+
+    await connectMongoDB();
+    const userExists = await User.findOne({email}).select("_id");
+
+    if (userExists) {
+      return NextResponse.error();
+    }
+
+    await User.create({ email, password: hashedPassword })
+
+    return NextResponse.json({ message: "user created" }, { status: 201 })
+
+  } catch (error) {
+    return NextResponse.error();
+  }
+
+
+
 }
 
 export function GET() {

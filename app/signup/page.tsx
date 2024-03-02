@@ -1,8 +1,6 @@
 'use client'
 import Link from "next/link";
 import Button from "../ui/button";
-import { createUserWithEmailAndPassword } from "firebase/auth";
-import {auth} from "@/app/lib/firebase";
 import { useRouter } from "next/navigation";
 
 export default function Page() {
@@ -27,20 +25,24 @@ export default function Page() {
     const passwordConfirm = data.passwordConfirm?.toString() // do validation
 
     try {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed up 
-          const user = userCredential.user;
-          console.log("signed up");
-          router.push('/dashboard');
-          // ...
+
+      const res = await fetch("api/create-account", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          email, password
         })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          console.log(errorCode, errorMessage)
-          // ..
-        });
+      })
+
+      if (res.ok) {
+        console.log("signed up");
+        router.push('/dashboard');
+      } else {
+        console.log("failed to create user or already exists");
+      }
+      
 
     } catch (error) {
       console.log(error)

@@ -1,27 +1,20 @@
 "use client";
 
-import { getDocs, collection } from "firebase/firestore";
-import { db } from "@/app/lib/firebase";
-import { auth } from "@/app/lib/firebase";
-import dynamic from "next/dynamic";
-
 interface savedNumber {
   id: string,
   name: string,
   value: string
 }
 
-async function CalculatePage() {
+export default async function Page() {
 
 
   //const data = await getNumbers();
 
-  const numbersSnapshot = auth.currentUser ? await getDocs(collection(db, "users", `${auth.currentUser?.uid}`, "savedNumbers")) : [];
-
   const data: any = []
 
-  numbersSnapshot.forEach((doc) => {
-    data.push({ ...doc.data(), id: doc.id })
+  data.forEach((num: savedNumber) => {
+    data.push({ ...num })
   });
 
   return <main className="min-h-screen">
@@ -33,9 +26,3 @@ async function CalculatePage() {
     })}
   </main>
 }
-
-const Page = dynamic(() => Promise.resolve(CalculatePage), {
-  ssr: false,
-})
-
-export default Page;

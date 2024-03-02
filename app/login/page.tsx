@@ -2,8 +2,6 @@
 import Link from "next/link";
 import Button from "../ui/button";
 import { useRouter } from "next/navigation";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/app/lib/firebase";
 
 
 export default function Page() {
@@ -22,18 +20,7 @@ export default function Page() {
     const password = data.password.toString()
 
     try {
-      signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-          // Signed in 
-          const user = userCredential.user;
-          console.log("signed into firebase");
-          router.push("/dashboard");
-          // ...
-        })
-        .catch((error) => {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-        });
+      router.push("/dashboard");
     } catch (error) {
       console.log(error)
     }
