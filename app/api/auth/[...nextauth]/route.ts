@@ -1,12 +1,20 @@
 import connectMongoDB from "@/app/lib/mongodb";
-import User from "@/app/models/user";
+import User from "@/app/models/mongoose/user";
 import NextAuth, { AuthOptions } from "next-auth";
 import bcrypt from "bcryptjs";
 
 import CredentialsProvider from "next-auth/providers/credentials"
-import { Poltawski_Nowy } from "next/font/google";
 
 const authOptions: AuthOptions = {
+  callbacks: {
+    session: ({ session, token }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: token.sub,
+      },
+    }),
+  },
   providers: [
     CredentialsProvider({
       name: "credentials",

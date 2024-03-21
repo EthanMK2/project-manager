@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import connectMongoDB from "@/app/lib/mongodb"
-import User from "@/app/models/user";
+import User from "@/app/models/mongoose/user";
 import bcrypt from "bcryptjs";
 
 
@@ -19,8 +19,7 @@ export async function POST(request: Request) {
       return NextResponse.error();
     }
 
-    await User.create({ email, password: hashedPassword })
-
+    const createUser = await User.create({ email, password: hashedPassword });
     return NextResponse.json({ message: "user created" }, { status: 201 })
 
   } catch (error) {

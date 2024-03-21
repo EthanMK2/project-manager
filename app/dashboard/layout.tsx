@@ -36,7 +36,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Navlinks />
         <Button onClick={() => {
           signOut()
-        }}>Log Out {session?.user?.email}</Button>
+          // ignoring this "user.id" error due to next-auth package issues
+          // @ts-ignore
+        }}>Log Out {session?.user?.email} uid {session?.user?.id}</Button>
       </div>
       <div className="">{children}</div>
     </div>
