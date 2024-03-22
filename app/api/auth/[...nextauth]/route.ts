@@ -5,7 +5,7 @@ import bcrypt from "bcryptjs";
 
 import CredentialsProvider from "next-auth/providers/credentials"
 
-const authOptions: AuthOptions = {
+export const authOptions: AuthOptions = {
   callbacks: {
     session: ({ session, token }) => ({
       ...session,

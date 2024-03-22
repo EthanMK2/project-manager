@@ -2,7 +2,7 @@ import mongoose, { Schema, models } from "mongoose";
 import TaskType from "../ts/taskType";
 import ContactType from "../ts/contactType";
 
-const projectSchema = new Schema({
+export const projectSchema = new Schema({
   title: {
     type: String,
     required: true
@@ -36,10 +36,13 @@ const projectSchema = new Schema({
   },
   expectedPay: {
     type: String
+  },
+  userId: {
+    type: String
   }
 }, { timestamps: true })
 
-export const Project = models.project || mongoose.model("Project", projectSchema);
+export const Project = models.projects || mongoose.model("projects", projectSchema);
 
 export type ProjectType = {
   title: string,
@@ -52,5 +55,6 @@ export type ProjectType = {
   finishDate: Date | undefined,
   inspectionSuccessful: boolean,
   priority: string,
-  expectedPay: string
+  expectedPay: string,
+  userId: string
 }
