@@ -1,6 +1,4 @@
-import { ProjectType } from "@/app/models/mongoose/project"
 import ProjectList from "@/app/ui/components/project-list";
-import { useSession } from "next-auth/react";
 import { Suspense } from "react";
 
 export default function Page() {

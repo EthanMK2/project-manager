@@ -45,6 +45,7 @@ export const projectSchema = new Schema({
 export const Project = models.projects || mongoose.model("projects", projectSchema);
 
 export type ProjectType = {
+  _id: string,
   title: string,
   checklist: Array<TaskType>,
   contacts: Array<ContactType>,

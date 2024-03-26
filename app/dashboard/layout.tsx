@@ -3,16 +3,9 @@
 import Button from "../ui/button";
 import Navlinks from "../ui/navlinks";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
-import { useSession } from "next-auth/react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   const [showMobileNav, setShowMobileNav] = useState<boolean>(true)
-
-  const router = useRouter();
-
-  const { data: session } = useSession();
 
   // not consistent
   // if (!user) {
@@ -34,11 +27,6 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <div className="hidden lg:block bg-white">
         {/* Logis Projects Logo */}
         <Navlinks />
-        <Button onClick={() => {
-          signOut()
-          // ignoring this "user.id" error due to next-auth package issues
-          // @ts-ignore
-        }}>Log Out {session?.user?.email} uid {session?.user?.id}</Button>
       </div>
       <div className="">{children}</div>
     </div>

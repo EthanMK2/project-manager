@@ -1,62 +1,55 @@
 "use client";
 import { ProjectType } from "@/app/models/mongoose/project";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import { redirect, useRouter } from "next/navigation";
+import useSWR from "swr";
 
 const ProjectList = () => {
 
-  const { data: session } = useSession();
-  const [projectList, setProjectList] = useState<Array<ProjectType>>([]);
+  const { data: session, status } = useSession();
+
+  if (status === "unauthenticated") {
+    redirect("/login");
+  }
 
   // @ts-ignore
   const userId = session?.user?.id;
 
-  useEffect(() => {
-    if (session?.user) {
-      fetch(`api/home/${userId}`).then((req) => {
-        return req.json();
-      }).then((data) => {
-        console.log(data)
-        setProjectList(data.projectList);
-      })
-    }
-  }, [])
+  const fetcher = (input: RequestInfo) => fetch(input).then((res) => res.json())
+  
+  const { data, error } = useSWR(`/api/home/${userId}`, fetcher);
+ 
+  if (error) return <div>Failed to load</div>
 
-  return <ol>
-    <li>
-      {projectList.map((project) => {
-        return <div>
+  if (!data) {
+    return <ol>LOADING...</ol>
+  } else {
+    return <ol>
+      {data.projectList.map((project: ProjectType) => {
+        return <li key={project._id} id={project._id}>
           {project.title}
-          <br />
           {project.address}
-          <br />
           {project.checklist.map((task) => {
-            return task.description
+            return <p key={task.id}>{task.description}</p>
           })}
-          <br />
           {project.completionStatus}
-          <br />
           {project.contacts.map((contact) => {
-            return <div>FirstName: {contact.firstName} <br />
+            return <div key={contact.id}>FirstName: {contact.firstName} <br />
               LastName: {contact.lastName}</div>
           })}
-          <br />
           {project.expectedPay}
-          <br />
           {project.finishDate?.toString()}
-          <br />
           {project.inspectionSuccessful}
-          <br />
           {project.notes}
-          <br />
           {project.priority}
-          <br />
           {project.shortDescription}
-        </div>
+        </li>
       })}
-    </li>
-  </ol>
+      <li>Item</li>
+    </ol>
 
+  }
 }
 
 export default ProjectList;
+
