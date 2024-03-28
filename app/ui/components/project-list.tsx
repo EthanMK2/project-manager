@@ -1,7 +1,7 @@
 "use client";
 import { ProjectType } from "@/app/models/mongoose/project";
 import { useSession } from "next-auth/react";
-import { redirect, useRouter } from "next/navigation";
+import { redirect } from "next/navigation";
 import useSWR from "swr";
 
 const ProjectList = () => {
@@ -45,7 +45,6 @@ const ProjectList = () => {
           {project.shortDescription}
         </li>
       })}
-      <li>Item</li>
     </ol>
 
   }
