@@ -2,7 +2,9 @@
 import { SourceType } from "@/app/models/mongoose/source";
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
+import { PlusIcon } from "@heroicons/react/16/solid";
 import useSWR from "swr";
+import Button from "../button";
 
 const SourceList = () => {
 
@@ -16,29 +18,30 @@ const SourceList = () => {
   const userId = session?.user?.id;
 
   const fetcher = (input: RequestInfo) => fetch(input).then((res) => res.json())
-  
+
   const { data, error } = useSWR(`/api/sourcing/${userId}`, fetcher);
- 
+
   if (error) return <div>Failed to load</div>
 
   if (!data) {
     return <ol>LOADING...</ol>
   } else {
-    return <ol>
+    return <ol className="m-2">
+      <Button className="w-full m-0 py-0 sm:w-fit sm:ml-auto sm:block"><p className="inline align-middle font-bold text-xl"></p><PlusIcon className="w-12 sm:w-8 inline m-auto"></PlusIcon></Button>
+
       {data.sourceList.map((source: SourceType) => {
-        return <li key={source._id}>
-          {source.name}
-          <br />
-          {source.description}
-          {source.phoneNumbers.map((phoneNumber) => {
-            return <p key={phoneNumber}>Phone: {phoneNumber}</p>
-          })}
+        return <li className="mt-4" key={source._id}>
+          <p>{source.name}</p>
+          <p>{source.description}</p>
+          <p>{source.phoneNumbers.map((phoneNumber) => {
+            return <a key={phoneNumber} href={`tel:${phoneNumber}`} className="underline block text-blue-600">{phoneNumber}</a>
+          })}</p>
+
           {source.emails.map((email) => {
             return <div key={email}>Email: {email}</div>
           })}
         </li>
       })}
-      <li>Source List</li>
     </ol>
 
   }

@@ -28,7 +28,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         {/* Logis Projects Logo */}
         <Navlinks />
       </div>
-      <div className="">{children}</div>
+      <div className="w-full xl:mx-32">{children}</div>
     </div>
   </>
   );
