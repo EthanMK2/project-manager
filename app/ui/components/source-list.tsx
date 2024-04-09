@@ -20,7 +20,7 @@ const SourceList = () => {
 
   const fetcher = (input: RequestInfo) => fetch(input).then((res) => res.json())
 
-  const { data, error } = useSWR(`/api/sourcing/${userId}`, fetcher);
+  const { data, error, mutate } = useSWR(`/api/sourcing/${userId}`, fetcher);
 
   if (error) return <div>Failed to load</div>
 
@@ -32,12 +32,27 @@ const SourceList = () => {
 
       {data.sourceList.map((source: SourceType) => {
         return <li className="mt-4 p-2 sm:mx-8 xl:mx-16 border-2 rounded-2xl" key={source._id}>
-          <Source source={source}></Source>
+          <Source source={source} saveSource={saveSource}></Source>
         </li>
       })}
     </ol>
 
   }
+
+  function saveSource(source: SourceType) {
+    fetch(`/api/sourcing/${source.userId}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        source: source
+      }),
+      method: "PUT"
+    })
+    mutate({...data})
+  }
 }
+
+
 
 export default SourceList;

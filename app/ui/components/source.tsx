@@ -7,10 +7,11 @@ import EditSource from "../modals/edit-source";
 import { createPortal } from "react-dom";
 
 interface SourceProps {
-  source: SourceType
+  source: SourceType,
+  saveSource: any
 }
 
-const Source = ({ source: { _id, name, description, phoneNumbers, emails, userId } }: SourceProps) => {
+const Source = ({ source: { _id, name, description, phoneNumber, email, userId }, saveSource }: SourceProps) => {
 
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
 
@@ -25,19 +26,17 @@ const Source = ({ source: { _id, name, description, phoneNumbers, emails, userId
     <p>{description}</p>
     <div className="flex flex-row mt-6">
       <PhoneIcon className="w-8 mr-2 text-blue-600"></PhoneIcon>
-      <p className=" my-auto">{phoneNumbers.map((phoneNumber) => {
-        return <a key={phoneNumber} href={`tel:${phoneNumber}`} className="underline block text-blue-600">{phoneNumber}</a>
-      })}</p>
+      <p className=" my-auto">
+        <a key={phoneNumber} href={`tel:${phoneNumber}`} className="underline block text-blue-600">{phoneNumber}</a>
+      </p>
     </div>
     <div className="flex flex-row mt-6">
       <EnvelopeIcon className="text-blue-600 w-8 mr-2"></EnvelopeIcon>
       <div className="my-auto">
-        {emails.map((email) => {
-          return <div key={email}>{email}</div>
-        })}
+        <div key={email}>{email}</div>
       </div>
     </div>
-    {showEditModal && createPortal(<EditSource source={{_id, name, description, phoneNumbers, emails, userId}} setShowModal={setShowEditModal}></EditSource>, document.body)}
+    {showEditModal && createPortal(<EditSource source={{ _id, name, description, phoneNumber, email, userId }} setShowModal={setShowEditModal} saveSource={saveSource}></EditSource>, document.body)}
   </article>
 }
 

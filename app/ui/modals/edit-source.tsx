@@ -1,37 +1,74 @@
+"use client";
+
 import { SourceType } from "@/app/models/mongoose/source";
-import { EnvelopeIcon, PencilSquareIcon, PhoneIcon } from "@heroicons/react/16/solid";
+import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
+import Button from "../button";
+import { useState } from "react";
 
 interface EditProps {
   source: SourceType,
-  setShowModal: any
+  setShowModal: any,
+  saveSource: any
 }
 
-// TODO: enable editable inputs and send api request on save, and make cancel button
+const EditSource = ({ source: { _id, name, description, phoneNumber, email, userId }, setShowModal, saveSource }: EditProps) => {
 
-const EditSource = ({ source: { _id, name, description, phoneNumbers, emails, userId }, setShowModal }: EditProps) => {
+  const initialSource = { _id, name, description, phoneNumber, email, userId }
+
+  const [sourceVals, setSourceVals] = useState<SourceType>({ ...initialSource })
 
   return <>
     <div onClick={() => { setShowModal(false) }} id="modal-overlay" className="bg-black opacity-30 w-full h-full absolute top-0 left-0"></div>
-    <article className="bg-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-      <div className="flex flex-row mb-4">
-        <p className="my-auto ml-2">{name.toUpperCase()}</p>
-      </div>
-      <p>{description}</p>
-      <div className="flex flex-row mt-6">
+    <form className="w-11/12 sm:w-fit p-4 sm:p-8 rounded-2xl bg-white fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+      <label htmlFor="name">Name
+        <input onChange={(e) => {
+          setSourceVals((prevVal) => {
+            return { ...prevVal, name: e.target.value }
+          })
+        }} name="name" type="text" placeholder="Name" defaultValue={`${name}`} className="mb-4 w-full p-2 border"></input>
+      </label>
+      <label htmlFor="description">Description
+        <input onChange={(e) => {
+          setSourceVals((prevVal) => {
+            return { ...prevVal, description: e.target.value }
+          })
+        }} name="description" type="text" placeholder="Description" defaultValue={`${description}`} className="mb-4 w-full p-2 border"></input>
+      </label>
+
+      <p>Phone Number</p>
+      <div className="flex flex-row items-center">
         <PhoneIcon className="w-8 mr-2 text-blue-600"></PhoneIcon>
-        <p className=" my-auto">{phoneNumbers.map((phoneNumber) => {
-          return <a key={phoneNumber} href={`tel:${phoneNumber}`} className="underline block text-blue-600">{phoneNumber}</a>
-        })}</p>
+
+        <input onChange={(e) => {
+          setSourceVals((prevVal) => {
+            return { ...prevVal, phoneNumber: e.target.value }
+          })
+        }} type="text" placeholder="Phone Number" defaultValue={`${phoneNumber}`} className="p-2 border"></input>
+
       </div>
-      <div className="flex flex-row mt-6">
+
+      <p className="mt-4">Email</p>
+      <div className="flex flex-row mb-2">
         <EnvelopeIcon className="text-blue-600 w-8 mr-2"></EnvelopeIcon>
-        <div className="my-auto">
-          {emails.map((email) => {
-            return <div key={email}>{email}</div>
-          })}
-        </div>
+        <input onChange={(e) => {
+          setSourceVals((prevVal) => {
+            return { ...prevVal, email: e.target.value }
+          })
+        }} type="email" placeholder="Email" defaultValue={`${email}`} className="p-2 border"></input>
       </div>
-    </article>
+      <div className="flex flex-row">
+        <Button onClick={(e) => {
+          e.preventDefault();
+          setShowModal(false)
+        }} className="!text-black bg-white hover:bg-white hover:underline ml-auto" >Cancel</Button>
+        <Button onClick={(e) => {
+          e.preventDefault();
+          console.log(sourceVals)
+          saveSource(sourceVals);
+          setShowModal(false);
+        }} className="py-2 px-4 ml-8" >Save</Button>
+      </div>
+    </form>
   </>
 }
 

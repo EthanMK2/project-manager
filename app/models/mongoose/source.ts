@@ -8,11 +8,11 @@ export const sourceSchema = new Schema({
   description: {
     type: String,
   },
-  phoneNumbers: {
-    type: Array,
+  phoneNumber: {
+    type: String,
   },
-  emails: {
-    type: Array,
+  email: {
+    type: String,
   },
   userId: {
     type: String,
@@ -25,7 +25,7 @@ export type SourceType = {
   _id: string,
   name: string,
   description: string,
-  phoneNumbers: string[],
-  emails: string[],
+  phoneNumber: string,
+  email: string,
   userId: string
 }
