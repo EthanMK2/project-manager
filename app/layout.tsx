@@ -20,7 +20,7 @@ export default function RootLayout({
 
   return (
     <html lang="en">
-      <body className={lusitana.className}>
+      <body className={`${lusitana.className} w-full relative`}>
         <AuthProvider>
           {children}
         </AuthProvider>

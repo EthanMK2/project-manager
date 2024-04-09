@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { PlusIcon } from "@heroicons/react/16/solid";
 import useSWR from "swr";
 import Button from "../button";
+import Source from "./source";
 
 const SourceList = () => {
 
@@ -26,20 +27,12 @@ const SourceList = () => {
   if (!data) {
     return <ol>LOADING...</ol>
   } else {
-    return <ol className="m-2">
-      <Button className="w-full m-0 py-0 sm:w-fit sm:ml-auto sm:block"><p className="inline align-middle font-bold text-xl"></p><PlusIcon className="w-12 sm:w-8 inline m-auto"></PlusIcon></Button>
+    return <ol className="p-2 grid sm:grid-cols-2">
+      <Button className="w-full m-0 py-0 sm:w-fit sm:ml-auto sm:block sm:col-span-2"><p className="inline align-middle font-bold text-xl"></p><PlusIcon className="w-12 sm:w-8 inline m-auto"></PlusIcon></Button>
 
       {data.sourceList.map((source: SourceType) => {
-        return <li className="mt-4" key={source._id}>
-          <p>{source.name}</p>
-          <p>{source.description}</p>
-          <p>{source.phoneNumbers.map((phoneNumber) => {
-            return <a key={phoneNumber} href={`tel:${phoneNumber}`} className="underline block text-blue-600">{phoneNumber}</a>
-          })}</p>
-
-          {source.emails.map((email) => {
-            return <div key={email}>Email: {email}</div>
-          })}
+        return <li className="mt-4 p-2 sm:mx-8 xl:mx-16 border-2 rounded-2xl" key={source._id}>
+          <Source source={source}></Source>
         </li>
       })}
     </ol>

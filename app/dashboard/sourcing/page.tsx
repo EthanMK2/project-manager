@@ -4,7 +4,7 @@ import { Suspense } from "react";
 
 export default function Page() {
 
-  return <main className="min-h-screen w-full">
+  return <main className="min-h-screen">
     <PageTitle title="Sources"></PageTitle>
     <Suspense fallback={<>"Fallback thingy"</>}>
       <SourceList />
