@@ -1,17 +1,18 @@
 "use client";
 
 import { SourceType } from "@/app/models/mongoose/source";
-import { EnvelopeIcon, PhoneIcon } from "@heroicons/react/16/solid";
+import { EnvelopeIcon, PhoneIcon, TrashIcon } from "@heroicons/react/16/solid";
 import Button from "../button";
 import { useState } from "react";
 
 interface EditProps {
   source: SourceType,
   setShowModal: any,
-  saveSource: any
+  saveSource: any,
+  deleteSource: any
 }
 
-const EditSource = ({ source: { _id, name, description, phoneNumber, email, userId }, setShowModal, saveSource }: EditProps) => {
+const EditSource = ({ source: { _id, name, description, phoneNumber, email, userId }, setShowModal, saveSource, deleteSource }: EditProps) => {
 
   const initialSource = { _id, name, description, phoneNumber, email, userId }
 
@@ -57,6 +58,15 @@ const EditSource = ({ source: { _id, name, description, phoneNumber, email, user
         }} type="email" placeholder="Email" defaultValue={`${email}`} className="p-2 border"></input>
       </div>
       <div className="flex flex-row">
+        
+        {initialSource._id && <Button onClick={(e) => {
+          e.preventDefault();
+          if (window.confirm("DELETE SOURCING CONTACT: Are you sure?")) {
+            deleteSource(sourceVals);
+            setShowModal(false);
+          }
+        }} className="px-2 text-red-500 bg-white hover:bg-red-500 hover:text-white"><TrashIcon className="w-6"></TrashIcon></Button>}
+
         <Button onClick={(e) => {
           e.preventDefault();
           setShowModal(false)

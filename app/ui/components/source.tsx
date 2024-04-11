@@ -8,10 +8,11 @@ import { createPortal } from "react-dom";
 
 interface SourceProps {
   source: SourceType,
-  saveSource: any
+  saveSource: any,
+  deleteSource: any
 }
 
-const Source = ({ source: { _id, name, description, phoneNumber, email, userId }, saveSource }: SourceProps) => {
+const Source = ({ source: { _id, name, description, phoneNumber, email, userId }, saveSource, deleteSource }: SourceProps) => {
 
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
 
@@ -36,7 +37,7 @@ const Source = ({ source: { _id, name, description, phoneNumber, email, userId }
         <div key={email}>{email}</div>
       </div>
     </div>
-    {showEditModal && createPortal(<EditSource source={{ _id, name, description, phoneNumber, email, userId }} setShowModal={setShowEditModal} saveSource={saveSource}></EditSource>, document.body)}
+    {showEditModal && createPortal(<EditSource source={{ _id, name, description, phoneNumber, email, userId }} setShowModal={setShowEditModal} saveSource={saveSource} deleteSource={deleteSource}></EditSource>, document.body)}
   </article>
 }
 

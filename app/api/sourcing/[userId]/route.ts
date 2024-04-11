@@ -1,10 +1,8 @@
 import { NextResponse } from "next/server";
-import { Source, SourceType } from "@/app/models/mongoose/source";
+import { Source } from "@/app/models/mongoose/source";
 import connectMongoDB from "@/app/lib/mongodb";
 import { getServerSession } from "next-auth";
-import { News_Cycle } from "next/font/google";
 
-// get sourcing contacts
 export async function GET(req: Request) {
   const urlEndpoints = req.url.split("/")
   const userId = urlEndpoints[urlEndpoints.length - 1]
@@ -23,8 +21,6 @@ export async function GET(req: Request) {
 
 // update sources
 export async function PUT(req: Request) {
-  const urlEndpoints = req.url.split("/")
-  const userId = urlEndpoints[urlEndpoints.length - 1]
   const session = await getServerSession();
   if (!session) {
     return NextResponse.json({ message: "no session" }, { status: 401 })
@@ -40,7 +36,7 @@ export async function PUT(req: Request) {
     }
 
     await connectMongoDB();
-    await Source.updateOne({ "_id": source._id }, newSource, { upsert: true })
+    await Source.updateOne({ "_id": source._id }, newSource, { upsert: true });
 
     return NextResponse.json({ message: "updated" }, { status: 201 })
   }
@@ -48,10 +44,7 @@ export async function PUT(req: Request) {
 
 }
 
-// create sources
 export async function POST(req: Request) {
-  const urlEndpoints = req.url.split("/")
-  const userId = urlEndpoints[urlEndpoints.length - 1]
   const session = await getServerSession();
   if (!session) {
     return NextResponse.json({ message: "no session" }, { status: 401 })
@@ -70,6 +63,25 @@ export async function POST(req: Request) {
     await Source.create(newSource);
 
     return NextResponse.json({ message: "created" }, { status: 201 })
+  }
+
+
+}
+
+export async function DELETE(req: Request) {
+  const urlEndpoints = req.url.split("/")
+  const userId = urlEndpoints[urlEndpoints.length - 1]
+  const session = await getServerSession();
+  if (!session) {
+    return NextResponse.json({ message: "no session" }, { status: 401 })
+  } else {
+    const data = await req.json();
+    const { source } = data;
+
+    await connectMongoDB();
+    await Source.deleteOne({_id: source._id, userId});
+
+    return NextResponse.json({ message: "deleted" }, { status: 201 })
   }
 
 

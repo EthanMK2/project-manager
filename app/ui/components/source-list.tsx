@@ -34,11 +34,11 @@ const SourceList = () => {
   } else {
     return <ol className="p-2 grid sm:grid-cols-2">
       <Button onClick={() => { setShowAddModal(true) }} className="w-full m-0 py-0 sm:w-fit sm:ml-auto sm:block sm:col-span-2"><p className="inline align-middle font-bold text-xl"></p><PlusIcon className="w-12 sm:w-8 inline m-auto"></PlusIcon></Button>
-      {showAddModal && createPortal(<EditSource source={{ _id: "", name: "", description: "", phoneNumber: "", email: "", userId }} setShowModal={setShowAddModal} saveSource={createSource}></EditSource>, document.body)}
+      {showAddModal && createPortal(<EditSource source={{ _id: "", name: "", description: "", phoneNumber: "", email: "", userId }} setShowModal={setShowAddModal} saveSource={createSource} deleteSource={deleteSource}></EditSource>, document.body)}
       
       {data.sourceList.map((source: SourceType) => {
         return <li className="mt-4 p-2 sm:mx-8 xl:mx-16 border-2 rounded-2xl" key={source._id}>
-          <Source source={source} saveSource={saveSource}></Source>
+          <Source source={source} saveSource={saveSource} deleteSource={deleteSource}></Source>
         </li>
       })}
     </ol>
@@ -67,6 +67,19 @@ const SourceList = () => {
         source: source
       }),
       method: "POST"
+    })
+    mutate({ ...data })
+  }
+
+  function deleteSource(source: SourceType) {
+    fetch(`/api/sourcing/${source.userId}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        source: source
+      }),
+      method: "DELETE"
     })
     mutate({ ...data })
   }
