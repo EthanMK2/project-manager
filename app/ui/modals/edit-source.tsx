@@ -64,7 +64,9 @@ const EditSource = ({ source: { _id, name, description, phoneNumber, email, user
         <Button onClick={(e) => {
           e.preventDefault();
           console.log(sourceVals)
+
           saveSource(sourceVals);
+
           setShowModal(false);
         }} className="py-2 px-4 ml-8" >Save</Button>
       </div>

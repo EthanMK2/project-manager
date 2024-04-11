@@ -6,6 +6,9 @@ import { PlusIcon } from "@heroicons/react/16/solid";
 import useSWR from "swr";
 import Button from "../button";
 import Source from "./source";
+import { useState } from "react";
+import { createPortal } from "react-dom";
+import EditSource from "../modals/edit-source";
 
 const SourceList = () => {
 
@@ -14,6 +17,8 @@ const SourceList = () => {
   if (status === "unauthenticated") {
     redirect("/login");
   }
+
+  const [showAddModal, setShowAddModal] = useState(false);
 
   // @ts-ignore
   const userId = session?.user?.id;
@@ -28,8 +33,9 @@ const SourceList = () => {
     return <ol>LOADING...</ol>
   } else {
     return <ol className="p-2 grid sm:grid-cols-2">
-      <Button className="w-full m-0 py-0 sm:w-fit sm:ml-auto sm:block sm:col-span-2"><p className="inline align-middle font-bold text-xl"></p><PlusIcon className="w-12 sm:w-8 inline m-auto"></PlusIcon></Button>
-
+      <Button onClick={() => { setShowAddModal(true) }} className="w-full m-0 py-0 sm:w-fit sm:ml-auto sm:block sm:col-span-2"><p className="inline align-middle font-bold text-xl"></p><PlusIcon className="w-12 sm:w-8 inline m-auto"></PlusIcon></Button>
+      {showAddModal && createPortal(<EditSource source={{ _id: "", name: "", description: "", phoneNumber: "", email: "", userId }} setShowModal={setShowAddModal} saveSource={createSource}></EditSource>, document.body)}
+      
       {data.sourceList.map((source: SourceType) => {
         return <li className="mt-4 p-2 sm:mx-8 xl:mx-16 border-2 rounded-2xl" key={source._id}>
           <Source source={source} saveSource={saveSource}></Source>
@@ -49,7 +55,20 @@ const SourceList = () => {
       }),
       method: "PUT"
     })
-    mutate({...data})
+    mutate({ ...data })
+  }
+
+  function createSource(source: SourceType) {
+    fetch(`/api/sourcing/${source.userId}`, {
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        source: source
+      }),
+      method: "POST"
+    })
+    mutate({ ...data })
   }
 }
 
