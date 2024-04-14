@@ -30,7 +30,7 @@ const ProjectList = () => {
           {project.title}
           {project.address}
           {project.checklist.map((task) => {
-            return <p key={task.id}>{task.description}</p>
+            return <p key={task.description}>{task.description}</p>
           })}
           {project.completionStatus}
           {project.contacts.map((contact) => {
