@@ -14,7 +14,6 @@ export async function GET(req: Request) {
     
     await connectMongoDB();
     const estimateTemplateList = await EstimateTemplate.find({}).exec();
-    console.log(estimateTemplateList)
 
     return NextResponse.json({ estimateTemplateList }, { status: 201 })
   }
