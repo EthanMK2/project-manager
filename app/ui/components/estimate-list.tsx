@@ -3,9 +3,8 @@
 import { useSession } from "next-auth/react";
 import { redirect } from "next/navigation";
 import useSWR from "swr";
-import { DocumentIcon, PlusIcon } from "@heroicons/react/24/outline";
+import { DocumentIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
-import Button from "../button";
 
 interface estimateTitles {
   title: string,
