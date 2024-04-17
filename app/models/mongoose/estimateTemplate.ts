@@ -21,7 +21,7 @@ export const estimateTemplateSchema = new Schema({
     type: String
   },
   completionStatus: {
-    type: Boolean
+    type: String
   },
   finishDate: {
     type: Date
@@ -40,7 +40,7 @@ export type EstimateTemplateType = {
   contacts: Array<ContactType>,
   sources: Array<SourceType>,
   address: string,
-  completionStatus: boolean,
+  completionStatus: string,
   finishDate: Date,
   userId: string
 }

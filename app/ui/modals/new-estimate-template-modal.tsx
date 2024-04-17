@@ -30,7 +30,7 @@ const NewEstimateTemplateModal = ({ setShowModal }: modalProps) => {
         <Button onClick={(e) => {
           e.preventDefault();
           setShowModal(false);
-        }} className="bg-white text-black hover:underline hover:bg-white mr-auto">Cancel</Button>
+        }} className="bg-white !text-black hover:underline hover:bg-white mr-auto">Cancel</Button>
         <Button onClick={async (e) => {
           e.preventDefault();
           const res = await fetch(`/api/estimateTemplates/${userId}`, {

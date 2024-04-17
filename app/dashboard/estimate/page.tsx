@@ -1,13 +1,15 @@
+import EstimateTemplateContextProvider from "@/app/context/estimate-template-context";
 import Button from "@/app/ui/button";
 import EstimateList from "@/app/ui/components/estimate-list";
 import EstimateTemplateList from "@/app/ui/components/estimate-template-list";
+import NewEstimate from "@/app/ui/components/new-estimate";
 import NewEstimateTemplate from "@/app/ui/components/new-estimate-template";
 import PageTitle from "@/app/ui/page-title";
 import { PlusIcon } from "@heroicons/react/24/outline";
 import { Suspense } from "react";
 
 export default function Page() {
-  return <main className="min-h-screen">
+  return <EstimateTemplateContextProvider><main className="min-h-screen">
     <PageTitle title="Estimates"></PageTitle>
     <div className="lg:flex lg:flex-row">
       <Suspense fallback={<>"Fallback thingy"</>}>
@@ -15,7 +17,8 @@ export default function Page() {
           <h2 className="w-full text-center text-lg p-1">In-Progress</h2>
           {/* Pass data to component; buttons need the data */}
           <EstimateList />
-          <Button className="mt-auto mx-auto px-2 py-2 flex flex-row align-middle"><PlusIcon className="w-6 mr-2"></PlusIcon>New Estimate</Button>
+          <NewEstimate />
+          
         </div>
       </Suspense>
 
@@ -24,9 +27,10 @@ export default function Page() {
           <h2 className="w-full text-center text-lg p-1">Templates</h2>
           <EstimateTemplateList />
           <NewEstimateTemplate />
-          
+
         </div>
       </Suspense>
     </div>
   </main>
+  </EstimateTemplateContextProvider>
 }

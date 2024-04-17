@@ -5,6 +5,9 @@ import { redirect } from "next/navigation";
 import useSWR from "swr";
 import { DocumentIcon } from "@heroicons/react/24/outline";
 import Link from "next/link";
+import { useContext } from "react";
+import EstimateTemplateContextProvider, { EstimateTemplateContext } from "@/app/context/estimate-template-context";
+import { TemplateContext } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface estimateTemplateTitles {
   title: string,
@@ -18,6 +21,8 @@ const EstimateTemplateList = () => {
     redirect("/login");
   }
 
+  const context = useContext(EstimateTemplateContext);
+
   // @ts-ignore
   const userId = session?.user?.id;
 
@@ -26,6 +31,10 @@ const EstimateTemplateList = () => {
   const { data, error } = useSWR(`/api/estimateTemplates/${userId}`, fetcher);
 
   if (error) return <div>Failed to load</div>
+
+  if (data) {
+    context?.setEstimateTemplates(data.estimateTemplateList)
+  }
 
   if (!data) {
     return <ol>LOADING...</ol>

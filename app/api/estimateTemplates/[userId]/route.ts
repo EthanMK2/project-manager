@@ -3,7 +3,7 @@ import connectMongoDB from "@/app/lib/mongodb";
 import { getServerSession } from "next-auth";
 import { EstimateTemplate } from "@/app/models/mongoose/estimateTemplate";
 
-// get all titles
+// get
 export async function GET(req: Request) {
   const urlEndpoints = req.url.split("/")
   const userId = urlEndpoints[urlEndpoints.length - 1]
@@ -13,7 +13,7 @@ export async function GET(req: Request) {
   } else {
 
     await connectMongoDB();
-    const estimateTemplateList = await EstimateTemplate.find({}).exec();
+    const estimateTemplateList = await EstimateTemplate.find({ userId: userId }).exec();
 
     return NextResponse.json({ estimateTemplateList }, { status: 201 })
   }
@@ -37,14 +37,13 @@ export async function POST(req: Request) {
       contacts: [],
       sources: [],
       address: "",
-      completionStatus: false,
+      completionStatus: "in-progress",
       finishDate: new Date(),
       userId
     }
 
     await connectMongoDB();
     const estimateTemplate = await EstimateTemplate.create(newTemplate);
-    console.log(estimateTemplate._id.toString());
 
     return NextResponse.json({ templateId: estimateTemplate._id.toString() }, { status: 201 })
   }
