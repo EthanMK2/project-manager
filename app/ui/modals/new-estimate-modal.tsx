@@ -8,6 +8,7 @@ import { EstimateTemplateContext } from "@/app/context/estimate-template-context
 import { EstimateTemplateType } from "@/app/models/mongoose/estimateTemplate";
 import { clsx } from "clsx";
 import { CheckIcon } from "@heroicons/react/24/outline";
+import { EstimateType } from "@/app/models/mongoose/estimate";
 
 interface modalProps {
   setShowModal: any
@@ -55,15 +56,14 @@ const NewEstimateModal = ({ setShowModal }: modalProps) => {
 
       {usingTemplate && <ol className="h-48 lg:w-96 overflow-y-auto">
         {context?.estimateTemplates?.map((template) => {
-          return <>
-            <li onClick={() => {
-              setSelectedTemplate(template);
-            }} className={clsx({
-              "py-4 px-2 rounded-lg flex flex-row bg-green-400 hover:cursor-pointer": selectedTemplate?._id === template._id,
-              "py-4 px-2 rounded-lg flex flex-row bg-white hover:cursor-pointer": true
-            })} key={template._id}><CheckIcon className="w-6 mr-2 text-white"></CheckIcon>{template.title}</li>
-            <hr />
-          </>
+          return <li onClick={() => {
+            setSelectedTemplate(template);
+          }} className={clsx({
+            "py-4 px-2 rounded-lg flex flex-row !bg-green-500 hover:cursor-pointer !text-white": selectedTemplate?._id === template._id,
+            "py-4 px-2 rounded-lg flex flex-row bg-white hover:cursor-pointer": true
+          })} key={template._id}><CheckIcon className="w-6 mr-2 text-white"></CheckIcon>{template.title}
+          </li>
+
         })}
       </ol>}
 
@@ -79,8 +79,59 @@ const NewEstimateModal = ({ setShowModal }: modalProps) => {
             return
           }
 
-          // fetch req to post new estimate data, either from template or scratch
-        }} className="px-4 py-2">Create</Button>
+          if (usingTemplate && !selectedTemplate) {
+            // setError here
+            return
+          }
+
+          // post new estimate data either from template or scratch
+          if (usingTemplate && selectedTemplate) {
+            const newEstimate: EstimateType = {...selectedTemplate, _id: "", title: name, userId: userId}
+            const res = await fetch(`/api/estimates/${userId}`, {
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                newEstimate: newEstimate
+              }),
+              method: "POST",
+            })
+
+            if (res.ok) {
+              const newEstimateId = await res.json();
+              const id = newEstimateId.estimateId;
+              router.push(`/dashboard/estimate/${id}`);
+            }
+          } else {
+            const newEstimate: EstimateType = {
+              _id: "",
+              title: name,
+              checklist: [],
+              contacts: [],
+              sources: [],
+              address: "",
+              completionStatus: "",
+              finishDate: new Date(),
+              userId: userId
+            }
+            const res = await fetch(`/api/estimates/${userId}`, {
+              headers: {
+                "Content-Type": "application/json"
+              },
+              body: JSON.stringify({
+                newEstimate: newEstimate
+              }),
+              method: "POST",
+            })
+
+            if (res.ok) {
+              const newEstimateId = await res.json();
+              const id = newEstimateId.estimateId;
+              router.push(`/dashboard/estimate-templates/${id}`);
+            }
+          }
+
+        }} className="px-4 py-2 mt-2">Create</Button>
       </div>
     </form>
   </>
