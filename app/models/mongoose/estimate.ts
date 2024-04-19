@@ -31,6 +31,8 @@ export const estimateSchema = new Schema({
   },
 })
 
+// TODO: change schema: delete collection then change sources to array of objectIds
+
 export const Estimate = models.estimates || mongoose.model("estimates", estimateSchema);
 
 export type EstimateType = {

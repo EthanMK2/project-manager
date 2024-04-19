@@ -5,7 +5,7 @@ import Navlinks from "../ui/navlinks";
 import { useState } from "react";
 
 export default function Layout({ children }: { children: React.ReactNode }) {
-  const [showMobileNav, setShowMobileNav] = useState<boolean>(true)
+  const [showMobileNav, setShowMobileNav] = useState<boolean>(false)
 
   // not consistent
   // if (!user) {

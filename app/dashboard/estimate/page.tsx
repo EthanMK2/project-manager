@@ -14,10 +14,8 @@ export default function Page() {
         <Suspense fallback={<>"Fallback thingy"</>}>
           <div className="my-4 mx-2 min-h-screen bg-slate-200 rounded-md lg:w-1/2">
             <h2 className="w-full text-center text-lg p-1">In-Progress</h2>
-            {/* Pass data to component; buttons need the data */}
             <EstimateList />
             <NewEstimate />
-
           </div>
         </Suspense>
 
@@ -26,7 +24,6 @@ export default function Page() {
             <h2 className="w-full text-center text-lg p-1">Templates</h2>
             <EstimateTemplateList />
             <NewEstimateTemplate />
-
           </div>
         </Suspense>
       </div>

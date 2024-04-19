@@ -127,7 +127,7 @@ const NewEstimateModal = ({ setShowModal }: modalProps) => {
             if (res.ok) {
               const newEstimateId = await res.json();
               const id = newEstimateId.estimateId;
-              router.push(`/dashboard/estimate-templates/${id}`);
+              router.push(`/dashboard/estimate/${id}`);
             }
           }
 

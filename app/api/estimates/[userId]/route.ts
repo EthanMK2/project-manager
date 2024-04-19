@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import connectMongoDB from "@/app/lib/mongodb";
 import { getServerSession } from "next-auth";
-import { Estimate, EstimateType } from "@/app/models/mongoose/estimate";
+import { Estimate } from "@/app/models/mongoose/estimate";
 
-// get all titles
+// get all
 export async function GET(req: Request) {
   const urlEndpoints = req.url.split("/")
   const userId = urlEndpoints[urlEndpoints.length - 1]
@@ -13,7 +13,7 @@ export async function GET(req: Request) {
   } else {
 
     await connectMongoDB();
-    const estimateList = await Estimate.find({ userId: userId }, { title: 1 }).exec();
+    const estimateList = await Estimate.find({ userId: userId }).exec();
     return NextResponse.json({ estimateList }, { status: 201 })
   }
 

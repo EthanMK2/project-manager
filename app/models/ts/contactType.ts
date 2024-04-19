@@ -1,7 +1,7 @@
 type ContactType = {
   firstName: string,
   lastName: string,
-  phone: string,
+  phoneNumber: string,
   email: string
 }
 
